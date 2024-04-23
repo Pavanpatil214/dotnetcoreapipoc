@@ -1,13 +1,33 @@
-namespace ing_bolt_joborder_processor
+using Microsoft.AspNetCore.Mvc;
+
+namespace ing_bolt_joborder_processor.Controllers
 {
-    public class WeatherForecast
+    [ApiController]
+    [Route("[controller]")]
+    public class WeatherForecastController : ControllerBase
     {
-        public DateOnly Date { get; set; }
+        private static readonly string[] Summaries = new[]
+        {
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        };
 
-        public int TemperatureC { get; set; }
+        private readonly ILogger<WeatherForecastController> _logger;
 
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        {
+            _logger = logger;
+        }
 
-        public string? Summary { get; set; }
+        [HttpGet(Name = "GetWeatherForecast")]
+        public IEnumerable<WeatherForecastDemo> Get()
+        {
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecastDemo
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            })
+            .ToArray();
+        }
     }
 }
