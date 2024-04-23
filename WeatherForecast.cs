@@ -1,6 +1,6 @@
 namespace ing_bolt_joborder_processor
 {
-    public class WeatherForecast
+    public class WeatherForecastDemo
     {
         public DateOnly Date { get; set; }
 
