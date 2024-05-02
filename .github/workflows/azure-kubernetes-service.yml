@@ -10,7 +10,7 @@ env:
   AZURE_CONTAINER_REGISTRY: 'cringbltdevmotif'
   CONTAINER_NAME: 'weatherforecasttestapp'
   RESOURCE_GROUP: 'RG-PavanPatil-Dev'
-  CLUSTER_NAME: 'aks-ing-blt-dev'
+  CLUSTER_NAME: 'aks-motif-demo'
   DOCKER_PATH: './Dockerfile'
 
 jobs:
@@ -35,6 +35,14 @@ jobs:
       - name: Build and push image to ACR
         run: |
           az acr build --file ${{ env.DOCKER_PATH }} --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
+
+      
+      - name: Set up Kubernetes context
+        uses: azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: ${{ env.CLUSTER_NAME }}
+          resource-group: ${{ env.RESOURCE_GROUP }}
 
       - name: Set up Helm
         uses: azure/setup-helm@v1
