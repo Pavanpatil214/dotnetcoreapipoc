@@ -34,7 +34,7 @@ jobs:
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
         run: |
-          az acr build --file ${{ env.DOCKER_PATH }} --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
+          az acr build --file ${{ env.DOCKER_PATH }} --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:latest --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
 
       
       - name: Set up Kubernetes context
@@ -51,7 +51,7 @@ jobs:
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install myrelease ./mychart --set image.repository=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }},image.tag=${{ github.sha }}
+          helm upgrade --install myrelease ./mychart --set image.repository=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }},image.tag=latest
 
       
 
