@@ -55,7 +55,7 @@ jobs:
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install weather-forecast-v3 ../../weather-forecast
+          helm upgrade --install weather-forecast-v3 weather-forecast/
 
       
 
