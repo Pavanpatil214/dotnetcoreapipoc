@@ -51,7 +51,7 @@ jobs:
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install myrelease ../charts/mychart --set image.repository=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }},image.tag=latest
+          helm upgrade --install myrelease ../myChart --set image.repository=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }},image.tag=latest
 
       
 
