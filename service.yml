@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnetcore-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8083
+    targetPort: 8080
+  selector:
+    app: dotnetcore
