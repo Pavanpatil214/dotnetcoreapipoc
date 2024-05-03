@@ -29,6 +29,10 @@ jobs:
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
 
+      - name: Check current directory and contents
+        run: |
+          pwd
+          ls -la
       
 
       # Builds and pushes an image up to your Azure Container Registry
