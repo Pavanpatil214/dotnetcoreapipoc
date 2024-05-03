@@ -8,9 +8,9 @@ on:
 env:
   # Local environment variables used later in the workflow
   AZURE_CONTAINER_REGISTRY: 'cringbltdevmotif'
-  CONTAINER_NAME: 'weatherforecasttestapp'
+  CONTAINER_NAME: 'webapplication1'
   RESOURCE_GROUP: 'RG-PavanPatil-Dev'
-  CLUSTER_NAME: 'aks-motif-demo'
+  CLUSTER_NAME: 'aks-test-motif'
   DOCKER_PATH: './Dockerfile'
 
 jobs:
