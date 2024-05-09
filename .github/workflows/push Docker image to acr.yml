@@ -1,6 +1,6 @@
 name: CI Build and push Docker image to acr
 
-on: [push]
+on: [dev]
 
 env:
   AZURE_CONTAINER_REGISTRY: "acringbltdevmotif"
