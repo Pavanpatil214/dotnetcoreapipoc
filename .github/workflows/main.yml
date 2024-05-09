@@ -1,0 +1,35 @@
+name: My Workflow self hosted
+
+on: [push]
+
+jobs:
+  my_job:
+    runs-on: self-hosted
+    env:
+      KUBECONFIG: ~/.kube/config
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+          sudo apt-get update
+          sudo apt-get install docker-ce
+
+      - name: Install Kubernetes CLI and Helm
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
+
+      - name: Run Helm upgrade
+        run: |
+          helm upgrade --install weather-forecast-v3 weather-forecast/
