@@ -1,0 +1,29 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: qualification-api
+  namespace: flux-demo
+spec:
+  interval: 1m
+  url: https://github.com/Pavanpatil214/dotnetcoreapipoc
+  ref:
+    branch: main
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: qualification-api
+  namespace: flux-demo
+spec:
+  interval: 1m
+  chart:
+    spec:
+      chart: ./helm-chart
+      version: '1.0.x'
+      sourceRef:
+        kind: GitRepository
+        name: qualification-api
+        namespace: flux-demo
+      interval: 1m
+  values:
+    replicaCount: 1
