@@ -3,7 +3,7 @@ name: CI Build and push Docker image to acr
 on: [dev]
 
 env:
-  AZURE_CONTAINER_REGISTRY: "acringbltdevmotif"
+  AZURE_CONTAINER_REGISTRY: "acrmotifprivate"
 
 jobs:
   build-and-push:
