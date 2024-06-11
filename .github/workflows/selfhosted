@@ -1,6 +1,8 @@
 name: My Workflow self hosted
 
-on: [push]
+on:
+  push:
+    branches: ["test"]
 
 jobs:
   my_job:
