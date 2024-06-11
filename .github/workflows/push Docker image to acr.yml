@@ -1,6 +1,8 @@
 name: CI Build and push Docker image to acr
 
-on: [push]
+on:
+  push:
+    branches: ["test"]
 
 env:
   AZURE_CONTAINER_REGISTRY: "acrmotifprivate"
