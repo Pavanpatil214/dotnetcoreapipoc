@@ -9,12 +9,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          path: somedir
 
       - name: Download GitLeaks
         run: |
           wget https://github.com/zricethezav/gitleaks/releases/download/v7.6.1/gitleaks-linux-amd64
           chmod +x gitleaks-linux-amd64
+      
+      - name: List contents of somedir
+        run: ls -la somedir
+     
 
-      - name: Run GitLeaks Scan
+      - name: Run GitLeaks Detection
         run: |
-          ./gitleaks-linux-amd64 detect --config-path=${{ github.workspace }}/.gitleaks.toml --path=${{ github.workspace }} --no-git --verbose
+          ./gitleaks-linux-amd64 detect --no-git --verbose -f json --path=${{ github.workspace }}/somedir
