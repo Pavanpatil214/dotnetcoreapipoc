@@ -17,4 +17,4 @@ jobs:
 
       - name: Run GitLeaks Detection
         run: |
-          ./gitleaks-linux-amd64 detect --no-git --verbose -f json --path=.
+          ./gitleaks-linux-amd64 detect --config-path=.gitleaks.toml --no-git --verbose -f json --path=.

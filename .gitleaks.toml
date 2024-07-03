@@ -4,5 +4,5 @@
   
   # Allow a specific file
   files = [
-    "./gitleaks-linux-amd64",
+    "gitleaks-linux-amd64"
   ]
