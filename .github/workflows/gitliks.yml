@@ -3,7 +3,7 @@ name: GitLeaks Workflow
 on: [push]
 
 jobs:
-  semgrep:
+  GitLeaks:
     name: Run GitLeaks
     runs-on: ubuntu-latest
     steps:
