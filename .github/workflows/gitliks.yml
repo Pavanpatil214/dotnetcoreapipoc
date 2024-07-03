@@ -1,0 +1,26 @@
+name: GitLeaks Workflow
+
+on: [push]
+
+jobs:
+  semgrep:
+    name: Run GitLeaks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download GitLeaks
+        run: |
+          wget https://github.com/zricethezav/gitleaks/releases/download/v7.6.1/gitleaks-linux-amd64
+          chmod +x gitleaks-linux-amd64
+
+      - name: Run GitLeaks Detection
+        run: |
+          ./gitleaks-linux-amd64 detect --no-git --verbose -f json --path=. --report=gitleaks-report.json
+
+      - name: Upload GitLeaks Report as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gitleaks-report
+          path: gitleaks-report.json
