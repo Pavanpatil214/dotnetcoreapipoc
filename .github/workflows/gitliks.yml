@@ -17,13 +17,4 @@ jobs:
 
       - name: Run GitLeaks Detection
         run: |
-          ./gitleaks-linux-amd64 detect --no-git --verbose -f json --path=. --config-path=.gitleaks.toml --report=./gitleaks-report.json
-
-      - name: List current directory contents
-        run: ls -la
-
-      - name: Upload GitLeaks Report as Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: gitleaks-report
-          path: ./gitleaks-report.json
+          ./gitleaks-linux-amd64 detect --no-git --verbose -f json --path=. --config-path=.gitleaks.toml
