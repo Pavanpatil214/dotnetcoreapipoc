@@ -10,7 +10,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          path: somedir
+          path: checkout-dir
 
       - name: Download GitLeaks
         run: |
@@ -23,4 +23,4 @@ jobs:
 
       - name: Run GitLeaks Detection
         run: |
-          ./gitleaks-linux-amd64 detect --no-git --verbose -f json --path=${{ github.workspace }}/somedir
+          ./gitleaks-linux-amd64 detect --no-git --verbose -f json --path=${{ github.workspace }}/checkout-dir
