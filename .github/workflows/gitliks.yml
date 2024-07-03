@@ -15,6 +15,11 @@ jobs:
           wget https://github.com/zricethezav/gitleaks/releases/download/v7.6.1/gitleaks-linux-amd64
           chmod +x gitleaks-linux-amd64
 
+      - name: Verify Working Directory
+        run: |
+            pwd
+            ls -la
+
       - name: Run GitLeaks Detection
         run: |
           ./gitleaks-linux-amd64 detect --no-git --verbose -f json --path=. --report=gitleaks-report.json
