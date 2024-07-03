@@ -15,6 +15,6 @@ jobs:
           wget https://github.com/zricethezav/gitleaks/releases/download/v7.6.1/gitleaks-linux-amd64
           chmod +x gitleaks-linux-amd64
 
-      - name: Run GitLeaks Detection
+      - name: Run GitLeaks Scan
         run: |
-          ./gitleaks-linux-amd64 detect --config-path=.gitleaks.toml --no-git --verbose -f json --path=.
+          ./gitleaks-linux-amd64 detect --config-path=${{ github.workspace }}/.gitleaks.toml --path=${{ github.workspace }} --no-git --verbose
