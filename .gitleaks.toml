@@ -1,8 +1,0 @@
-# .gitleaks.toml
-[allowlist]
-  description = "Allowlist specific files and patterns"
-  
-  # Allow a specific file
-  files = [
-    "gitleaks-linux-amd64"
-  ]
