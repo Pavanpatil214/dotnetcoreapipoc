@@ -1,0 +1,3 @@
+[[rules]]
+description = "Exclude binaries"
+files = ['gitleaks-linux-amd64']
