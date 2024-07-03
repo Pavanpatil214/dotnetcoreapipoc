@@ -17,10 +17,6 @@ jobs:
           wget https://github.com/zricethezav/gitleaks/releases/download/v7.6.1/gitleaks-linux-amd64
           chmod +x gitleaks-linux-amd64
       
-      - name: List contents of somedir
-        run: ls -la somedir
-     
-
       - name: Run GitLeaks Detection
         run: |
           ./gitleaks-linux-amd64 detect --no-git --verbose -f json --path=${{ github.workspace }}/checkout-dir
