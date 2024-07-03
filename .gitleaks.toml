@@ -1,3 +1,8 @@
-[[rules]]
-description = "Exclude binaries"
-files = ['gitleaks-linux-amd64']
+# .gitleaks.toml
+[allowlist]
+  description = "Allowlist specific files and patterns"
+  
+  # Allow a specific file
+  files = [
+    "./gitleaks-linux-amd64",
+  ]
