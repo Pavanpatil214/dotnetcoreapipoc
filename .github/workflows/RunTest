@@ -1,4 +1,4 @@
-name: GitLeaks Workflow
+name: Run Manulay
 
 on:
   workflow_dispatch:
