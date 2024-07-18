@@ -1,0 +1,14 @@
+name: Run Manulay Demo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  RunManulayDemo:
+    name: Run GitLeaks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          path: checkout-dir
