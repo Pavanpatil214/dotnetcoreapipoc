@@ -15,7 +15,7 @@ jobs:
       
       - name: Update Helm chart values
         run: |
-          sed -i 's/tag:.*/tag: ${{ env.COMMIT_ID }}/' ./weather-forecast/values.yaml
+          sed -i 's/tag:.*/tag: ${{ env.COMMIT_ID }}/' ./checkout-dir/weather-forecast/values.yaml
 
       - name: Push changes
         env:
