@@ -8,7 +8,7 @@ image:
   repository: cringbltdevmotif.azurecr.io/webapplication1
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag: 8d8b5b7
 
 imagePullSecrets: []
 nameOverride: ""
