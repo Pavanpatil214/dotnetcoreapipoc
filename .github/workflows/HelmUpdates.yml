@@ -24,7 +24,7 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.email "pavan.patil@motifworks.com"
+          git config --global user.email "pavan.patil"
           git config --global user.name "Pavanpatil214"
 
       - name: Push changes
