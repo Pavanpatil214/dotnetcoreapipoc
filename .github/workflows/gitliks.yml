@@ -22,7 +22,7 @@ jobs:
 
       - name: Create a feature branch
         run: |
-          git checkout -b update-helm-values
+          git checkout -b update-helm-values-${{ env.COMMIT_ID }}
 
       - name: Update Helm chart values
         run: |
@@ -44,5 +44,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh auth login --with-token
-          gh pr create --base main --head update-helm-values --title "Update Helm chart values with commit ID" --body "Automated pull request to update Helm chart values with the latest commit ID."
+          gh pr create --base main --head update-helm-values-${{ env.COMMIT_ID }} --title "Update Helm chart values with commit ID" --body "Automated pull request to update Helm chart values with the latest commit ID."
 
