@@ -1,10 +1,12 @@
-name: GitLeaks Workflow
+name: Update Chart Values
 
-on: [push]
+on:
+  push:
+    branches:
+      - main # Trigger this workflow on pushes to the main branch
 
 jobs:
-  GitLeaks:
-    name: Run GitLeaks
+  update-chart:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -19,22 +21,25 @@ jobs:
       - name: Configure Git
         run: |
           git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions test"
-
-      - name: Pull latest changes
-        run: git pull origin ${{ github.ref_name }}
+          git config --global user.name "GitHub Actions"
 
       - name: Update Helm chart values
         run: |
           sed -i 's/tag:.*/tag: ${{ env.COMMIT_ID }}/' ./weather-forecast/values.yaml
-  
-      - name: Commit changes to values.yaml
+
+      - name: Create a new branch and commit changes
         run: |
+          git checkout -b update-helm-values
           git add ./weather-forecast/values.yaml
           git commit -m "Update Helm chart values with commit ID"
+          git push origin update-helm-values
 
-      - name: Push changes to new branch
-        run: git push origin
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: "Update Helm chart values with commit ID"
+          body: "This PR updates the Helm chart values with the latest commit ID."
+          base: main
+          head: update-helm-values
         env:
-          PAT_GITHUB: ${{ secrets.PAT_GITHUB }}
-        
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
