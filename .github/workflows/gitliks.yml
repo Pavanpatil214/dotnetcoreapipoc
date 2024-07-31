@@ -21,6 +21,17 @@ jobs:
           git config --global user.email "pavan.patil@motifworks.com"
           git config --global user.name "Pavanpatil214"
 
+      - name: Create a new branch for changes
+        run: |
+          git checkout -b update-values-${{ env.COMMIT_ID }}
+
+      - name: Pull latest changes
+        run: git pull origin ${{ github.ref_name }}
+
+      - name: Update Helm chart values
+        run: |
+          sed -i 's/tag:.*/tag: ${{ env.COMMIT_ID }}/' ./weather-forecast/values.yaml
+  
       - name: Commit changes to values.yaml
         run: |
           git add ./weather-forecast/values.yaml
@@ -28,12 +39,12 @@ jobs:
 
       - name: Push changes to new branch
         run: git push origin update-values-${{ env.COMMIT_ID }}
-
+  
       - name: Create a pull request
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.PAT_GITHUB }}
-          base: dev
+          base: main
           head: update-values-${{ env.COMMIT_ID }}
           title: "Update Helm chart values with commit ID ${{ env.COMMIT_ID }}"
           body: |
