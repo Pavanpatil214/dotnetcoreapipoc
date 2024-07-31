@@ -34,7 +34,7 @@ jobs:
           git commit -m "Update Helm chart values with commit ID"
 
       - name: Push changes to new branch
-        run: git push origin update-values-${{ env.COMMIT_ID }}
+        run: git push origin
         env:
           PAT_GITHUB: ${{ secrets.GITHUB_TOKEN }}
         
