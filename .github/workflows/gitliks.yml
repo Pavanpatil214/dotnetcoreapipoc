@@ -16,6 +16,11 @@ jobs:
           COMMIT_ID=$(git rev-parse --short HEAD)
           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
+      - name: Configure Git
+        run: |
+          git config --global user.email "pavan.patil@motifworks.com"
+          git config --global user.name "Pavanpatil214"
+
       - name: Commit changes to values.yaml
         run: |
           git add ./weather-forecast/values.yaml
