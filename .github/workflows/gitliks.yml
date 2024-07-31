@@ -36,5 +36,5 @@ jobs:
       - name: Push changes to new branch
         run: git push origin
         env:
-          PAT_GITHUB: ${{ secrets.GITHUB_TOKEN }}
+          PAT_GITHUB: ${{ secrets.PAT_GITHUB }}
         
