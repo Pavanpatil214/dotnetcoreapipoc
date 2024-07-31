@@ -27,9 +27,9 @@ jobs:
         run: |
           git checkout -b update-helm-values
           
-      - name: Pull latest changes from dev
+      - name: Pull latest changes from update-helm-values
         run: |
-          git pull origin dev
+          git pull origin update-helm-values
 
       - name: Update Helm chart values
         run: |
