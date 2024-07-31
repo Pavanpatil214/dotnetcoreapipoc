@@ -3,7 +3,7 @@ name: Update Chart Values
 on: 
   push:
     branches:
-      - dev  # This triggers the workflow on pushes to the 'dev' branch.
+      - main  # This triggers the workflow on pushes to the 'dev' branch.
 
 jobs:
   update-chart:
@@ -51,5 +51,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh auth login --with-token
-          gh pr create --base dev --head update-helm-values --title "Update Helm chart values with commit ID" --body "Automated pull request to update Helm chart values with the latest commit ID."
+          gh pr create --base main --head update-helm-values --title "Update Helm chart values with commit ID" --body "Automated pull request to update Helm chart values with the latest commit ID."
 
