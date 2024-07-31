@@ -18,7 +18,7 @@ jobs:
 
       - name: Commit changes to values.yaml
         run: |
-          git add ./checkout-dir/weather-forecast/values.yaml
+          git add ./weather-forecast/values.yaml
           git commit -m "Update Helm chart values with commit ID"
 
       - name: Push changes to new branch
