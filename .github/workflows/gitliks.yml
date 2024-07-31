@@ -18,12 +18,8 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.email "pavan.patil@motifworks.com"
-          git config --global user.name "Pavanpatil214"
-
-      - name: Create a new branch for changes
-        run: |
-          git checkout -b update-values-${{ env.COMMIT_ID }}
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
 
       - name: Pull latest changes
         run: git pull origin ${{ github.ref_name }}
@@ -39,13 +35,6 @@ jobs:
 
       - name: Push changes to new branch
         run: git push origin update-values-${{ env.COMMIT_ID }}
-  
-      - name: Create a pull request
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.PAT_GITHUB }}
-          base: main
-          head: update-values-${{ env.COMMIT_ID }}
-          title: "Update Helm chart values with commit ID ${{ env.COMMIT_ID }}"
-          body: |
-            This pull request updates the Helm chart values with the commit ID `${{ env.COMMIT_ID }}`.
+        env:
+          PAT_GITHUB: ${{ secrets.GITHUB_TOKEN }}
+        
