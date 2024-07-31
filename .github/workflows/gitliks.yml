@@ -1,9 +1,6 @@
 name: Update Chart Values
 
-on: 
-  push:
-    branches:
-      - main  # This triggers the workflow on pushes to the 'dev' branch.
+on: [push]
 
 jobs:
   update-chart:
@@ -26,10 +23,6 @@ jobs:
       - name: Create a feature branch
         run: |
           git checkout -b update-helm-values
-          
-      - name: Pull latest changes from update-helm-values
-        run: |
-          git pull origin update-helm-values
 
       - name: Update Helm chart values
         run: |
