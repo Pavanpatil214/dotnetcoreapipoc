@@ -1,4 +1,4 @@
-name: Update Chart Values
+name: Update Chart Values1
 
 on:
   push:
