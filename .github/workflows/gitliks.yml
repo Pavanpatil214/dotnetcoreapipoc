@@ -20,3 +20,27 @@ jobs:
       - name: Run GitLeaks Detection
         run: |
           ./gitleaks-linux-amd64 detect --no-git --verbose -f json --path=${{ github.workspace }}/checkout-dir
+
+      - name: Get latest commit ID
+        id: get_commit_id
+        run: |
+          COMMIT_ID=$(git rev-parse --short HEAD)
+          echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
+
+      - name: Commit changes to values.yaml
+        run: |
+          git add ./checkout-dir/weather-forecast/values.yaml
+          git commit -m "Update Helm chart values with commit ID"
+
+      - name: Push changes to new branch
+        run: git push origin update-values-${{ env.COMMIT_ID }}
+
+      - name: Create a pull request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.PAT_GITHUB }}
+          base: dev
+          head: update-values-${{ env.COMMIT_ID }}
+          title: "Update Helm chart values with commit ID ${{ env.COMMIT_ID }}"
+          body: |
+            This pull request updates the Helm chart values with the commit ID `${{ env.COMMIT_ID }}`.
