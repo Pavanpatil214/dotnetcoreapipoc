@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  # Local environment variables used later in the workflow
+  # Local environment variables used later in the workflowsd
   AZURE_CONTAINER_REGISTRY: 'acringbltdevmotif'
   CONTAINER_NAME: 'webapplication1'
   RESOURCE_GROUP: 'RG-PavanPatil'
