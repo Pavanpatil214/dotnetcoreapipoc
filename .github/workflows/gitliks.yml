@@ -27,24 +27,32 @@ jobs:
         run: echo "PR_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
 
       - name: Fetch and Checkout the PR branch
+        env:
+          PR_BRANCH: ${{ env.PR_BRANCH }}
         run: |
-          git fetch origin ${{ env.PR_BRANCH }}
-          git checkout ${{ env.PR_BRANCH }}
+          git fetch origin "$PR_BRANCH"
+          git checkout "$PR_BRANCH"
 
       - name: Pull latest changes
+        env:
+          PR_BRANCH: ${{ env.PR_BRANCH }}
         run: |
-          git pull origin ${{ env.PR_BRANCH }} --rebase
+          git pull origin "$PR_BRANCH" --rebase
 
       - name: Update Helm chart values
+        env:
+          COMMIT_ID: ${{ env.COMMIT_ID }}
         run: |
-          sed -i 's/tag:.*/tag: ${{ env.COMMIT_ID }}/' ./weather-forecast/values.yaml
+          sed -i "s/tag:.*/tag: $COMMIT_ID/" ./weather-forecast/values.yaml
 
       - name: Commit and Push changes
+        env:
+          PR_BRANCH: ${{ env.PR_BRANCH }}
         run: |
           if git diff --quiet; then
             echo "No changes to commit"
           else
             git add ./weather-forecast/values.yaml
             git commit -m "Update Helm chart values with commit ID"
-            git push origin ${{ env.PR_BRANCH }}
+            git push origin "$PR_BRANCH"
           fi
