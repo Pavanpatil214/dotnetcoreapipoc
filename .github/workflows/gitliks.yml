@@ -28,9 +28,13 @@ jobs:
 
       - name: Create and switch to branch
         run: |
-          git checkout -b update-helm-values
+          git checkout -b update-helm-values || git checkout update-helm-values
 
-      - name: Commit changes to values.yaml
+      - name: Pull latest changes from remote
+        run: |
+          git pull origin update-helm-values --rebase || echo "No changes to pull"
+
+      - name: Commit and push changes to values.yaml
         env:
           PAT: ${{ secrets.PAT_GITHUB }}
         run: |
