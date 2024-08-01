@@ -23,7 +23,6 @@ jobs:
           git config --global user.name "GitHub Actions"
 
       - name: Set PR Branch Environment Variable
-        id: set_branch
         run: echo "PR_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
 
       - name: Fetch and Checkout the PR branch
