@@ -1,8 +1,11 @@
 name: Update Chart Values
 
-on: 
+on:
   pull_request:
     branches: [ dev ]
+
+env:
+   PR_BRANCH : ${{ github.head_ref }} 
 
 jobs:
   update-chart:
@@ -11,29 +14,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set up Git
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          
+      - name: Fetch and Checkout the PR branch
+        run: |
+          git fetch origin "${{ env.PR_BRANCH }}"
+          git checkout "${{ env.PR_BRANCH }}"
+
+      - name: Pull latest changes
+        run: |
+          git pull origin "${{ env.PR_BRANCH }}" --rebase
+
       - name: Get latest commit ID
         id: get_commit_id
         run: |
           COMMIT_ID=$(git rev-parse --short HEAD)
           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
-      - name: Pull latest changes
-        run: git pull origin ${{ github.ref_name }}
-
-      - name: Configure Git
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-
-
       - name: Update Helm chart values
         run: |
-          sed -i 's/tag:.*/tag: ${{ env.COMMIT_ID }}/' ./weather-forecast/values.yaml
+          sed -i "s/tag:.*/tag: ${COMMIT_ID}/" ./weather-forecast/values.yaml
 
-      - name: Commit changes to values.yaml
-        env:
-          PAT: ${{ secrets.PAT_GITHUB }}
+      - name: Commit and Push changes
         run: |
-          git add ./weather-forecast/values.yaml
-          git commit -m "Update Helm chart values with commit ID" || echo "No changes to commit"
-          git push origin update-helm-values
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git add ./weather-forecast/values.yaml
+            git commit -m "Update Helm chart values with commit ID"
+            git push origin "${{ env.PR_BRANCH }}"
+          fi
