@@ -18,7 +18,8 @@ jobs:
 
       - name: Create temporary branch for Helm chart update
         run: |
-          git checkout -b update-helm-chart-${{ env.COMMIT_ID }}
+          BRANCH_NAME="update-helm-chart-${{ env.COMMIT_ID }}"
+          git checkout -b $BRANCH_NAME
 
       - name: Update Helm chart values
         run: |
@@ -27,7 +28,7 @@ jobs:
           git config user.email "github-actions@github.com"
           git add ./weather-forecast/values.yaml
           git commit -m "Update Helm chart with new image tag ${{ env.COMMIT_ID }}"
-          git push origin update-helm-chart-${{ env.COMMIT_ID }}
+          git push origin ${{ env.BRANCH_NAME }}
 
       - name: Create Pull Request for Helm chart update
         uses: peter-evans/create-pull-request@v4
