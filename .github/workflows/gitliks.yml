@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 env:
-   PR_BRANCH : ${{ github.head_ref }}
+   PR_BRANCH : ${{ github.head_ref }} 
 
 jobs:
   update-chart:
