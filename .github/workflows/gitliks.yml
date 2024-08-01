@@ -35,10 +35,12 @@ jobs:
         run: |
           sed -i 's/tag:.*/tag: ${{ env.COMMIT_ID }}/' ./weather-forecast/values.yaml
 
-      - name: Commit changes to values.yaml
-        env:
-          PAT: ${{ secrets.PAT_GITHUB }}
+      - name: Commit and Push changes
         run: |
-          git add ./weather-forecast/values.yaml
-          git commit -m "Update Helm chart values with commit ID" || echo "No changes to commit"
-          git push origin ${{ github.head_ref }}
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git add ./weather-forecast/values.yaml
+            git commit -m "Update Helm chart values with commit ID"
+            git push origin ${{ github.head_ref }}
+          fi
