@@ -22,14 +22,14 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
 
-      - name: Fetch and Checkout the demo branch
+      - name: Fetch and Checkout the PR branch
         run: |
-          git fetch origin demo
-          git checkout demo
+          git fetch origin ${{ github.head_ref }}
+          git checkout ${{ github.head_ref }}
 
       - name: Pull latest changes
         run: |
-          git pull origin demo --rebase
+          git pull origin ${{ github.head_ref }} --rebase
 
       - name: Update Helm chart values
         run: |
@@ -41,4 +41,4 @@ jobs:
         run: |
           git add ./weather-forecast/values.yaml
           git commit -m "Update Helm chart values with commit ID" || echo "No changes to commit"
-          git push origin demo
+          git push origin ${{ github.head_ref }}
