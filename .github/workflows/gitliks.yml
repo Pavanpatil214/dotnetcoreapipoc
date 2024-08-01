@@ -40,4 +40,4 @@ jobs:
         run: |
           git add ./weather-forecast/values.yaml
           git commit -m "Update Helm chart values with commit ID" || echo "No changes to commit"
-          git push origin update-helm-values
+          git push origin update-helm-values || (echo "Push failed; trying to force push" && git push origin update-helm-values --force)
