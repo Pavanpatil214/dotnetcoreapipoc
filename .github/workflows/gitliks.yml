@@ -1,8 +1,8 @@
 name: Update Chart Values
 
-on: 
+on:
   pull_request:
-    branches: [ dev ]
+    branches: [ main ]
 
 jobs:
   update-chart:
@@ -17,23 +17,35 @@ jobs:
           COMMIT_ID=$(git rev-parse --short HEAD)
           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
-      - name: Pull latest changes
-        run: git pull origin ${{ github.ref_name }}
+      - name: Set GitHub head ref environment variable
+        id: set_head_ref
+        run: echo "HEAD_REF=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
+        env:
+          GITHUB_HEAD_REF: ${{ github.head_ref }}
 
       - name: Configure Git
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
 
-
       - name: Update Helm chart values
         run: |
-          sed -i 's/tag:.*/tag: ${{ env.COMMIT_ID }}/' ./weather-forecast/values.yaml
+          sed -i "s/tag:.*/tag: ${COMMIT_ID}/" ./weather-forecast/values.yaml
 
-      - name: Commit changes to values.yaml
+      - name: Create and switch to a new branch
+        run: |
+          git checkout -b update-helm-values
+
+      - name: Pull latest changes from remote
+        run: |
+          git pull origin "${HEAD_REF}" --rebase || echo "No changes to pull"
+        env:
+          HEAD_REF: ${{ env.HEAD_REF }}
+
+      - name: Commit and push changes to values.yaml
         env:
           PAT: ${{ secrets.PAT_GITHUB }}
         run: |
           git add ./weather-forecast/values.yaml
           git commit -m "Update Helm chart values with commit ID" || echo "No changes to commit"
-          git push origin update-helm-values
+          git push origin update-helm-values || (echo "Push failed; trying to force push" && git push origin update-helm-values --force)
