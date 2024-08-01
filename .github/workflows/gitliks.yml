@@ -11,6 +11,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+
+      - name: Set up dynamic branch name
+        id: setup
+        run: |
+            # Extract the branch name from the GitHub context
+            BRANCH_NAME=${GITHUB_REF#refs/heads/}
+            echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
+
       - name: Get latest commit ID
         id: get_commit_id
         run: |
@@ -18,7 +26,7 @@ jobs:
           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
       - name: Pull latest changes
-        run: git pull ${{ github.ref }}
+        run: git pull origin ${{ env.BRANCH_NAME }}
 
       - name: Configure Git
         run: |
