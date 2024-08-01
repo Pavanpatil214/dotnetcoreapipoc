@@ -18,13 +18,14 @@ jobs:
           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
       - name: Pull latest changes
-        run: git pull origin demo
+        run: |
+          git fetch origin demo
+          git rebase origin/demo
 
       - name: Configure Git
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-
 
       - name: Update Helm chart values
         run: |
