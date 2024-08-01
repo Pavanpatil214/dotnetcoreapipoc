@@ -22,14 +22,18 @@ jobs:
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
 
+      - name: Set PR Branch Environment Variable
+        id: set_branch
+        run: echo "PR_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
+
       - name: Fetch and Checkout the PR branch
         run: |
-          git fetch origin ${{ github.head_ref }}
-          git checkout ${{ github.head_ref }}
+          git fetch origin ${{ env.PR_BRANCH }}
+          git checkout ${{ env.PR_BRANCH }}
 
       - name: Pull latest changes
         run: |
-          git pull origin ${{ github.head_ref }} --rebase
+          git pull origin ${{ env.PR_BRANCH }} --rebase
 
       - name: Update Helm chart values
         run: |
@@ -42,5 +46,5 @@ jobs:
           else
             git add ./weather-forecast/values.yaml
             git commit -m "Update Helm chart values with commit ID"
-            git push origin ${{ github.head_ref }}
+            git push origin ${{ env.PR_BRANCH }}
           fi
