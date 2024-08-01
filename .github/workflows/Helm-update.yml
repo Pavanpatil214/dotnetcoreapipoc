@@ -3,7 +3,8 @@ name: Update Chart Values
 on: [push]
 
 env:
-   PR_BRANCH : ${{ github.head_ref }} 
+   PR_BRANCH : ${{ github.head_ref }}
+   commit_id : "test"
 
 jobs:
   update-chart:
@@ -12,9 +13,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Get latest commit ID
+        id: get_commit_id
+        run: |
+           COMMIT_ID=$(git rev-parse --short HEAD)
+           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
+
       - name: Create temporary branch for Helm chart update
         run: |
-          git checkout -b update-helm-chart-${{ github.sha.substring(0, 7) }}
+          git checkout -b update-helm-chart-${{ env.COMMIT_ID }}
 
       - name: Update Helm chart values
         run: |
@@ -22,17 +29,17 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add ./weather-forecast/values.yaml
-          git commit -m "Update Helm chart with new image tag ${GITHUB_SHA}"
-          git push origin update-helm-chart-${{ github.sha.substring(0, 7) }}
+          git commit -m "Update Helm chart with new image tag"
+          git push origin update-helm-chart-
   
       - name: Create Pull Request for Helm chart update
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          title: 'Update Helm chart with new image tag ${{ github.sha }}'
-          body: 'Automated PR to update Helm chart with new image tag ${{ github.sha }}'
+          title: 'Update Helm chart with new image tag ${{ env.COMMIT_ID }}'
+          body: 'Automated PR to update Helm chart with new image tag ${{ env.COMMIT_ID }}'
           base: main
-          head: update-helm-chart-${{ github.sha.substring(0, 7) }}
+          head: update-helm-chart-${{ env.COMMIT_ID }}
           files: |
             ./weather-forecast/values.yaml
           commit-message: 'Update Helm chart values'
