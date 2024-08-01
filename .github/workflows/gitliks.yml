@@ -2,7 +2,7 @@ name: Update Chart Values
 
 on: 
   pull_request:
-    branches: [ dev ]
+    branches: [ main ]
 
 jobs:
   update-chart:
@@ -18,7 +18,7 @@ jobs:
           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
       - name: Pull latest changes
-        run: git pull origin ${{ github.ref_name }}
+        run: git pull origin demo
 
       - name: Configure Git
         run: |
@@ -36,4 +36,4 @@ jobs:
         run: |
           git add ./weather-forecast/values.yaml
           git commit -m "Update Helm chart values with commit ID" || echo "No changes to commit"
-          git push origin update-helm-values
+          git push origin demo
