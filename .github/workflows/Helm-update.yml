@@ -1,9 +1,7 @@
 name: Update Tag
 
-on: [push]
-
-env:
-   PR_BRANCH : ${{ github.head_ref }}"
+on:
+  push:
 
 jobs:
   update-chart:
@@ -15,8 +13,8 @@ jobs:
       - name: Get latest commit ID
         id: get_commit_id
         run: |
-           COMMIT_ID=$(git rev-parse --short HEAD)
-           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
+          COMMIT_ID=$(git rev-parse --short HEAD)
+          echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
       - name: Create temporary branch for Helm chart update
         run: |
@@ -28,9 +26,9 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add ./weather-forecast/values.yaml
-          git commit -m "Update Helm chart with new image tag"
-          git push origin update-helm-chart-
-  
+          git commit -m "Update Helm chart with new image tag ${{ env.COMMIT_ID }}"
+          git push origin update-helm-chart-${{ env.COMMIT_ID }}
+
       - name: Create Pull Request for Helm chart update
         uses: peter-evans/create-pull-request@v4
         with:
