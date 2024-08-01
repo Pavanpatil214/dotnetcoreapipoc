@@ -17,6 +17,10 @@ jobs:
           COMMIT_ID=$(git rev-parse --short HEAD)
           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
+      - name: Extract GitHub head ref
+        id: extract_head_ref
+        run: echo "HEAD_REF=${{ github.head_ref }}" >> $GITHUB_ENV
+
       - name: Configure Git
         run: |
           git config --global user.email "actions@github.com"
@@ -24,7 +28,7 @@ jobs:
 
       - name: Update Helm chart values
         run: |
-          sed -i 's/tag:.*/tag: ${{ env.COMMIT_ID }}/' ./weather-forecast/values.yaml
+          sed -i "s/tag:.*/tag: ${{ env.COMMIT_ID }}/" ./weather-forecast/values.yaml
 
       - name: Create and switch to a new branch
         run: |
@@ -32,7 +36,7 @@ jobs:
 
       - name: Pull latest changes from remote
         run: |
-          git pull origin ${{ github.head_ref }} --rebase || echo "No changes to pull"
+          git pull origin "${{ env.HEAD_REF }}" --rebase || echo "No changes to pull"
 
       - name: Commit and push changes to values.yaml
         env:
