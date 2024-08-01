@@ -2,7 +2,7 @@ name: Update Chart Values
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ dev ]
 
 env:
    PR_BRANCH : ${{ github.head_ref }} 
