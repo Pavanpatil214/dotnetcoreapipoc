@@ -1,6 +1,8 @@
 name: Update Chart Values
 
-on: [push]
+on: 
+  pull_request:
+    branches: [ dev ]
 
 jobs:
   update-chart:
@@ -15,20 +17,14 @@ jobs:
           COMMIT_ID=$(git rev-parse --short HEAD)
           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
+      - name: Pull latest changes
+        run: git pull origin ${{ github.ref_name }}
+
       - name: Configure Git
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
 
-      - name: Create a feature branch
-        run: |
-          git checkout -b update-helm-values-${{ env.COMMIT_ID }}
-          git push origin update-helm-values-${{ env.COMMIT_ID }}
-
-      - name: Pull latest changes from main
-        run: |
-          git fetch origin
-          git pull origin main
 
       - name: Update Helm chart values
         run: |
@@ -40,14 +36,4 @@ jobs:
         run: |
           git add ./weather-forecast/values.yaml
           git commit -m "Update Helm chart values with commit ID" || echo "No changes to commit"
-          git push origin update-helm-values-${{ env.COMMIT_ID }}
-
-      - name: Install GitHub CLI
-        run: sudo apt-get install gh
-
-      - name: Create Pull Request
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh auth login --with-token
-          gh pr create --base main --head update-helm-values-${{ env.COMMIT_ID }} --title "Update Helm chart values with commit ID" --body "Automated pull request to update Helm chart values with the latest commit ID."
+          git push origin update-helm-values
