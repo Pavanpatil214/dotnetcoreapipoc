@@ -17,16 +17,18 @@ jobs:
           COMMIT_ID=$(git rev-parse --short HEAD)
           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
-      - name: Set GitHub head ref environment variable
-        id: set_head_ref
-        run: echo "HEAD_REF=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
-        env:
-          GITHUB_HEAD_REF: ${{ github.head_ref }}
-
-      - name: Configure Git
+      - name: Set the branch names
+        id: set_branch_names
         run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
+          # Set the branch names
+          HEAD_BRANCH=${GITHUB_HEAD_REF}
+          NEW_BRANCH="update-helm-values"
+          echo "HEAD_BRANCH=$HEAD_BRANCH" >> $GITHUB_ENV
+          echo "NEW_BRANCH=$NEW_BRANCH" >> $GITHUB_ENV
+
+      - name: Create and switch to a new branch
+        run: |
+          git checkout -b ${{ env.NEW_BRANCH }}
 
       - name: Update Helm chart values
         run: |
