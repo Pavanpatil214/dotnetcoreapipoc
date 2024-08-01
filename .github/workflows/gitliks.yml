@@ -18,7 +18,7 @@ jobs:
           echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
       - name: Pull latest changes
-        run: git pull
+        run: git pull ${{ github.ref }}
 
       - name: Configure Git
         run: |
