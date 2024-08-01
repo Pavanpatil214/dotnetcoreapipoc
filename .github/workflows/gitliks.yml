@@ -1,6 +1,6 @@
 name: Update Chart Values
 
-on: 
+on:
   pull_request:
     branches: [ main ]
 
