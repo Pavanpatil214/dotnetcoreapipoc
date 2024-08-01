@@ -1,10 +1,9 @@
-name: Update Chart Values
+name: Update Tag
 
 on: [push]
 
 env:
-   PR_BRANCH : ${{ github.head_ref }}
-   commit_id : "test"
+   PR_BRANCH : ${{ github.head_ref }}"
 
 jobs:
   update-chart:
@@ -25,7 +24,7 @@ jobs:
 
       - name: Update Helm chart values
         run: |
-          sed -i "s/tag: .*/tag: ${GITHUB_SHA}/" ./weather-forecast/values.yaml
+          sed -i 's/tag:.*/tag: ${{ env.COMMIT_ID }}/' ./weather-forecast/values.yaml
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add ./weather-forecast/values.yaml
