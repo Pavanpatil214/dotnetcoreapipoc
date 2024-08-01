@@ -1,8 +1,6 @@
 name: Update Chart Values
 
-on:
-  pull_request:
-    branches: [ dev ]
+on: [push]
 
 env:
    PR_BRANCH : ${{ github.head_ref }} 
@@ -14,36 +12,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Git
+      - name: Create temporary branch for Helm chart update
         run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          
-      - name: Fetch and Checkout the PR branch
-        run: |
-          git fetch origin "${{ env.PR_BRANCH }}"
-          git checkout "${{ env.PR_BRANCH }}"
-
-      - name: Pull latest changes
-        run: |
-          git pull origin "${{ env.PR_BRANCH }}" --rebase
-
-      - name: Get latest commit ID
-        id: get_commit_id
-        run: |
-          COMMIT_ID=$(git rev-parse --short HEAD)
-          echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
+          git checkout -b update-helm-chart-${{ github.sha.substring(0, 7) }}
 
       - name: Update Helm chart values
         run: |
-          sed -i "s/tag:.*/tag: ${COMMIT_ID}/" ./weather-forecast/values.yaml
-
-      - name: Commit and Push changes
-        run: |
-          if git diff --quiet; then
-            echo "No changes to commit"
-          else
-            git add ./weather-forecast/values.yaml
-            git commit -m "Update Helm chart values with commit ID"
-            git push origin "${{ env.PR_BRANCH }}"
-          fi
+          sed -i "s/tag: .*/tag: ${GITHUB_SHA}/" ./weather-forecast/values.yaml
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add ./weather-forecast/values.yaml
+          git commit -m "Update Helm chart with new image tag ${GITHUB_SHA}"
+          git push origin update-helm-chart-${{ github.sha.substring(0, 7) }}
+  
+      - name: Create Pull Request for Helm chart update
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: 'Update Helm chart with new image tag ${{ github.sha }}'
+          body: 'Automated PR to update Helm chart with new image tag ${{ github.sha }}'
+          base: main
+          head: update-helm-chart-${{ github.sha.substring(0, 7) }}
+          files: |
+            ./weather-forecast/values.yaml
+          commit-message: 'Update Helm chart values'
