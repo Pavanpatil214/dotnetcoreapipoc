@@ -14,12 +14,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Get latest commit ID
-        id: get_commit_id
-        run: |
-          COMMIT_ID=$(git rev-parse --short HEAD)
-          echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
-
       - name: Set up Git
         run: |
           git config --global user.email "actions@github.com"
@@ -33,6 +27,12 @@ jobs:
       - name: Pull latest changes
         run: |
           git pull origin "${{ env.PR_BRANCH }}" --rebase
+
+      - name: Get latest commit ID
+        id: get_commit_id
+        run: |
+          COMMIT_ID=$(git rev-parse --short HEAD)
+          echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
 
       - name: Update Helm chart values
         run: |
