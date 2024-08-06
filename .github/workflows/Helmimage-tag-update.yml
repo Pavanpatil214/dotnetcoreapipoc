@@ -17,15 +17,10 @@ jobs:
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          
-      - name: Fetch and Checkout the PR branch
-        run: |
-          git fetch origin "${{ env.PR_BRANCH }}"
-          git checkout "${{ env.PR_BRANCH }}"
 
       - name: Pull latest changes
         run: |
-          git pull origin "${{ env.PR_BRANCH }}" --rebase
+          git pull origin main
 
       - name: Get latest commit ID
         id: get_commit_id
@@ -44,5 +39,5 @@ jobs:
           else
             git add ./weather-forecast/values.yaml
             git commit -m "Update Helm chart values with commit ID"
-            git push origin "${{ env.PR_BRANCH }}"
+            git push origin main
           fi
