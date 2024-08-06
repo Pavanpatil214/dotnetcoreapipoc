@@ -39,5 +39,5 @@ jobs:
           else
             git add ./weather-forecast/values.yaml
             git commit -m "Update Helm chart values with commit ID"
-            git push origin main
+            git push --force origin main
           fi
